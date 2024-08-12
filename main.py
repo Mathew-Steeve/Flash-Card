@@ -6,7 +6,11 @@ BACKGROUND_COLOR = "#B1DDC6"
 FONT1 = ("Ariel", 40, "italic")
 FONT2 = ("ariel", 60, "bold")
 # RAND = randint(0, 101)
-data = read_csv("./data/french_words.csv")
+try:
+    data = read_csv("./data/words_to_learn.csv")
+except FileNotFoundError:
+    data = read_csv("./data/french_words.csv")
+
 # new_dataframe = DataFrame(data)
 new_dict = data.to_dict(orient="records")
 timer = None
@@ -14,14 +18,20 @@ ch = {}
 # ch = choice(new_dict)
 
 
+def right_ans():
+    global ch
+    new_dict.remove(ch)
+    word_to_learn = [val for val in new_dict if ch != val]
+
+    word_to_learn_dataframe = DataFrame(word_to_learn)
+    word_to_learn_dataframe.to_csv("./data/words_to_lean.csv")
+
+
 def next_card():
     global ch
     global timer
     window.after_cancel(timer)
     ch = choice(new_dict)
-    new_dict.remove(ch)
-    word_to_learn = {(ch.get(val1), ch.get(val2)) for (val1, val2) in new_dict}
-
     # rand = randint(0, 101)
     canvas.itemconfig(cards, image=card_front)
     canvas.itemconfig(title_text, text="French", fill="black")
@@ -58,7 +68,7 @@ canvas.grid(column=0, row=0, columnspan=2, pady=50, padx=50)
 
 wrong_button = Button(image=wrong_image, highlightthickness=0, padx=50, command=next_card)
 wrong_button.grid(column=0, row=1)
-right_button = Button(image=right_image, highlightthickness=0, padx=50, command=next_card)
+right_button = Button(image=right_image, highlightthickness=0, padx=50, command=right_ans)
 right_button.grid(column=1, row=1)
 
 next_card()

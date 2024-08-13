@@ -11,8 +11,8 @@ new_dict = {}
 try:
     data = read_csv("data/words_to_learn.csv")
 except FileNotFoundError:
-    original_data = read_csv("data/french_words.csv")
-    new_dict = original_data.to_dict(orient="records")
+    data = read_csv("data/french_words.csv")
+    new_dict = data.to_dict(orient="records")
 else:
     new_dict = data.to_dict(orient="records")
 # new_dataframe = DataFrame(data)

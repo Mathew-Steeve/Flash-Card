@@ -5,26 +5,29 @@ from random import *
 BACKGROUND_COLOR = "#B1DDC6"
 FONT1 = ("Ariel", 40, "italic")
 FONT2 = ("ariel", 60, "bold")
+ch = {}
+new_dict = {}
 # RAND = randint(0, 101)
 try:
-    data = read_csv("./data/words_to_learn.csv")
+    data = read_csv("data/words_to_learn.csv")
 except FileNotFoundError:
-    data = read_csv("./data/french_words.csv")
-
+    original_data = read_csv("data/french_words.csv")
+    new_dict = original_data.to_dict(orient="records")
+else:
+    new_dict = data.to_dict(orient="records")
 # new_dataframe = DataFrame(data)
-new_dict = data.to_dict(orient="records")
-timer = None
-ch = {}
+
+
 # ch = choice(new_dict)
 
 
 def right_ans():
-    global ch
+    # global ch
     new_dict.remove(ch)
-    word_to_learn = [val for val in new_dict if ch != val]
-
-    word_to_learn_dataframe = DataFrame(word_to_learn)
-    word_to_learn_dataframe.to_csv("./data/words_to_lean.csv")
+    # print(len(new_dict))
+    words_to_learn = DataFrame(new_dict)
+    words_to_learn.to_csv("data/words_to_learn.csv", index=False)
+    next_card()
 
 
 def next_card():
@@ -40,12 +43,12 @@ def next_card():
 
 
 def flip_card():
-    global timer
+    # global timer
     # window.after_cancel(timer)
     canvas.itemconfig(cards, image=card_back)
     canvas.itemconfig(title_text, text="English", fill="white")
     canvas.itemconfig(word_text, text=f"{ch["English"]}", fill="white")
-    timer = window.after(3000, next_card)
+    # timer = window.after(3000, next_card)
 
 
 window = Tk()
